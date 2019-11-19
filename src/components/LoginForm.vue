@@ -74,9 +74,7 @@ export default {
       }
     },
   },
-  mounted: function(){
-    this.checkLoggedIn()
-  },
+  
 }
 </script>
 

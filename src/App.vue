@@ -26,19 +26,23 @@ export default {
   name: 'App',
   data: function(){
     return{
-      isAuthenticated: this.$session.has('jwt')
+      // isAuthenticated: this.$session.has('jwt')
       // view session의 기능 중
+      isAuthenticated: this.$store.getters.isAuthenticated
     }
   },
   methods: {
     logout: function(){
-      this.$session.destroy()
+      // this.$session.destroy()
+      this.$store.dispatch('logout')
       this.$router.push('/login')
+
     }
   },
   updated: function(){ 
     // 지금 사용자가 보고 있는 화면이 렌더링이 다시 되면 이 함수를 실행하게됨
-    this.isAuthenticated = this.$session.has('jwt')
+    // this.isAuthenticated = this.$session.has('jwt')
+    this.isAuthenticated = this.$store.getters.isAuthenticated
 
   }
 }

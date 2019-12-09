@@ -13,22 +13,30 @@
 
 <script>
 import axios from 'axios'
-import jwtDecode from 'jwt-decode'
+// import jwtDecode from 'jwt-decode'
 export default {
   name: 'TodoList',
   props: {
     todos:Array,
   },
+  computed: {
+    requestHeader: function(){
+      return this.$store.getters.requestHeader
+    },
+    userId(){
+      return this.$store.getters.userId
+    }
+  },
   methods: {
     deleteTodo : function(todo){
-      this.$session.start()
-      const token = this.$session.get('jwt')
-      const requestHeader = {
-        headers : {
-            Authorization : 'JWT ' + token
-        }
-      }
-      axios.delete(`http://localhost:8000/api/v1/todos/${todo.id}/`, requestHeader)
+      // this.$session.start()
+      // const token = this.$session.get('jwt')
+      // const requestHeader = {
+      //   headers : {
+      //       Authorization : 'JWT ' + token
+      //   }
+      // }
+      axios.delete(`http://localhost:8000/api/v1/todos/${todo.id}/`, this.requestHeader)
       .then((res)=> {
         console.log(res)
         const targetTodo = this.todos.find(function(e){
@@ -46,22 +54,22 @@ export default {
       })
     },
     updateTodo: function(todo){
-      this.$session.start()
-      const token = this.$session.get('jwt')
-      const decodedToken = jwtDecode(token)
-      const userID = decodedToken.user_id
-      const requestHeader = {
-        headers : {
-            Authorization : 'JWT ' + token
-        }
-      }
+      // this.$session.start()
+      // const token = this.$session.get('jwt')
+      // const decodedToken = jwtDecode(token)
+      // const userID = decodedToken.user_id
+      // const requestHeader = {
+      //   headers : {
+      //       Authorization : 'JWT ' + token
+      //   }
+      // }
       
       const requestForm = new FormData()
-      requestForm.append('user',userID)
+      requestForm.append('user',this.userId)
       requestForm.append('title',todo.title)
       requestForm.append('completed',!todo.completed)
 
-      axios.put(`http://localhost:8000/api/v1/todos/${todo.id}/`,requestForm,requestHeader)
+      axios.put(`http://localhost:8000/api/v1/todos/${todo.id}/`,requestForm,this.requestHeader)
       .then((res)=>{
         console.log(res)
         todo.completed = !todo.completed
